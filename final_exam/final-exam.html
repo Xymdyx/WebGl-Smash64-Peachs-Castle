@@ -4,29 +4,6 @@
     
     <!-- include vertex shaders -->
 
-    <script id="wireframe-V" type="x-shader/x-vertex">
-        #version 300 es
-        in vec3 aVertexPosition;
-        
-        void main()
-        {
-            gl_Position = aVertexPosition;
-        }
-    </script>
-
-     <!-- wireframe fragment Shaders -->
-     <script id="wireframe-F" type="x-shader/x-fragment">
-         #version 300 es
-         precision mediump float;
-         
-         // Color that is the result of this shader
-         out vec4 fragColor;
-
-         void main(void) {
-             fragColor = vec4 (0.5, 0.5, 0.5, 1.0 );
-         }
-
-     </script>
 	 
 	 <!-- include phong vertex shader -->
 	 <script id="phong-per-vertex-V"  type="x-shader/x-vertex">
@@ -236,8 +213,8 @@
     // for object rotation
     uniform vec3 theta;
 	
-	 // Transforms
-    uniform mat4 modelT;
+	// Transforms
+	uniform mat4 modelT;
     uniform mat4 viewT;
     uniform mat4 projT;
       
@@ -264,11 +241,7 @@
                          -s.z,  c.z,  0.0,  0.0,
                          0.0,  0.0,  1.0,  0.0,
                          0.0,  0.0,  0.0,  1.0 );
-        
-		// All calculations will be done in camera space
-        mat4 modelView = viewT * modelT;
-        mat4 normalmatrix = transpose(inverse (modelView));
-		
+                         
         // pass uvs to fragment shader
         theUV = aUV;
 
@@ -302,7 +275,7 @@
          vec4 black = vec4(0.0,0.0,0.0,1.0);
          vec4 white = vec4(1.0,1.0,1.0,1.0);
          //tesselation for procedural checkerboard texture
-         float boardScale = 2.0;
+         float boardScale = 5.0;
          
          void main(void) {
              if( textureType == 0){ //it's an image texture
@@ -332,9 +305,13 @@
     <script type="text/javascript" src="./event.js"></script>
     
     <!-- texture images -->
-     <!--<img id="world-texture" src="2_no_clouds_8k.jpg" style="display: none;"> </img>-->
+    <!-- <img id="world-texture" src="2_no_clouds_8k.jpg" style="display: none;"> </img> -->
 	 <img id="castle-texture" src="textures/castle-background.png" style="display: none;"> </img>
-	 <img id="bumper-texture" src="textures/bumper-sprite-12k.png" style="display: none;"> </img>
+	 <img id="bumper-texture" src="textures/bumper-sprite-2k-trimmy.jpg" style="display: none;"> </img>
+	 <img id="bridge-texture" src="textures/brick-texture-800.jfif" style="display: none;"> </img>
+	 <img id="castle-top-texture" src="textures/castle-top-brick.png" style="display: none;"> </img>
+	 <img id="castle-base-texture" src="textures/castle-cyl-tower-1024k.png" style="display: none;"> </img>
+
 
 
 
@@ -361,15 +338,37 @@
               <tbody>
               <tr>
               <td> </td>
-              <td>List any keyboard controls here</td>
+              <td>I think I got a version that I like. I wish I had given myself more time to make triangular prisms.</td>
               </tr>
+			  <tr>
+              <td> </td>
+              <td>Use the slider to adjust bridge position along x-axis from -4.0 to 4.0</td>
+			  </tr>
               </tbody>
               </table>
-              
+              		<!--Bumper Slider -->
+
+		<div class="slideBridge">
+		<input type="range" min="-4.0" max="4.0" step = ".01" value="0.0" class="slider" id="bridge-slider">
+		
+		<p>Bridge X Coordinate: <span id="bridge-pos"></span></p>
+	</div>
+	<script>
+	var bridgeSlider = document.getElementById('bridge-slider');
+	var output = document.getElementById('bridge-pos');
+	output.innerHTML = bridgeSlider.value;
+	bridgeSlider.oninput = function() {
+		output.innerHTML = this.value;
+		bridgeXCoord = this.value;
+		screwAngle = radians(this.value * 360/4);
+		draw();
+	}
+	</script>
           </td>
+
       </tr>
   </table>
-  
+
   
 
 </body>
